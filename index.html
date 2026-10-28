@@ -173,6 +173,39 @@ button:focus-visible{outline:3px solid #c5a4ff;outline-offset:3px}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero>.mini-cards{min-height:180px}.home-feature-row{grid-template-columns:1fr}.home-feature{padding:13px}.play-mode-switch{width:100%}.play-mode-button{flex:1;padding:10px 8px;font-size:12px}.tabs{position:static}.hero h2{letter-spacing:-1.2px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
+
+/* Online gebruikt dezelfde royale speeltafel, kaartmaten en turn-animaties als bots. */
+.online-live-status{margin-top:12px;animation:modeEnter .32s cubic-bezier(.2,.8,.2,1)}
+.online-turn-message{margin-bottom:12px;font-size:14px;font-weight:850}
+.online-live-layout{min-height:calc(100dvh - 255px)}
+.online-live-layout>.online-table-panel{min-width:0;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:hidden}
+.online-shared-table{flex:1;min-height:clamp(330px,44vh,520px);animation:tableEnter .38s cubic-bezier(.2,.8,.2,1)}
+.online-shared-table .center-pile{gap:clamp(18px,4vw,42px)}
+.online-discard-card{cursor:default}
+.online-current-color{text-align:center;color:#d2e2e7;font-size:12px;padding:3px}
+.online-current-color strong{margin-left:5px;font-weight:950}
+.online-current-color .color-red{color:#ff6578}.online-current-color .color-blue{color:#77a5ff}.online-current-color .color-green{color:#55e2ae}.online-current-color .color-yellow{color:#ffd166}.online-current-color .color-wild{color:#d8b5ff}
+.online-shared-hand{justify-content:flex-start;flex-wrap:nowrap;min-height:110px;max-height:clamp(110px,17vh,150px);overflow-x:auto;overflow-y:hidden}
+.online-shared-hand .card{width:65px;height:96px;flex:0 0 65px;animation:cardDealIn .28s both}
+.online-shared-hand .card:nth-child(2){animation-delay:.025s}.online-shared-hand .card:nth-child(3){animation-delay:.05s}.online-shared-hand .card:nth-child(4){animation-delay:.075s}.online-shared-hand .card:nth-child(5){animation-delay:.1s}.online-shared-hand .card:nth-child(6){animation-delay:.125s}.online-shared-hand .card:nth-child(7){animation-delay:.15s}
+.online-shared-hand .card.playable-card{box-shadow:0 9px 25px #0005,0 0 0 1px #ffffff20;cursor:pointer}
+.online-shared-hand .card.online-card-playing{animation:onlineCardPlay .16s ease-in forwards;pointer-events:none}
+@keyframes onlineCardPlay{to{transform:translateY(-20px) scale(1.04);opacity:.55}}
+.online-shared-hand .card.playable-card:hover{transform:translateY(-7px) rotate(-1deg);filter:brightness(1.08)}
+.online-shared-hand .card.unplayable-card{opacity:.55;filter:saturate(.72)}
+.online-shared-hand .card:disabled{opacity:.4}
+.online-game-actions{margin-top:0;justify-content:flex-start}
+.online-side-stack{min-width:0}
+.online-player-feed{display:flex;flex-direction:column;gap:8px;max-height:220px}
+.online-player-feed>div{padding:7px 9px;background:#111d26;border-radius:9px;border:1px solid #ffffff0a}
+.online-deck-disabled{filter:saturate(.6)}
+@keyframes tableEnter{from{opacity:.65;transform:scale(.99)}to{opacity:1;transform:scale(1)}}
+@keyframes cardDealIn{from{opacity:0;transform:translateY(13px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(min-width:761px){.game-screen-active .online-live-status{flex:1;min-height:0;overflow:auto}.game-screen-active .online-live-layout{min-height:0;height:100%;grid-template-columns:minmax(0,1fr) minmax(220px,260px)}.game-screen-active .online-live-layout>.online-table-panel{min-height:0}.game-screen-active .online-shared-table{min-height:0}.game-screen-active .online-shared-hand{min-height:80px;max-height:clamp(90px,17vh,145px)}.game-screen-active .online-shared-hand .card{width:clamp(48px,4.4vw,65px);height:clamp(72px,10vh,96px);flex-basis:clamp(48px,4.4vw,65px)}.game-screen-active .online-side-stack{overflow:hidden}.game-screen-active .online-side-stack>.panel{padding:12px}}
+@media(max-width:800px){.online-live-layout{grid-template-columns:1fr;min-height:0}.online-shared-table{min-height:340px}.online-shared-hand{justify-content:flex-start}.online-side-stack{display:grid;grid-template-columns:1fr}.online-player-feed{max-height:none}}
+.game-screen-active .online-mode-panel:not(.hidden){display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}.game-screen-active .online-live-status{min-height:0;flex:1;overflow:auto}.game-screen-active .online-live-layout{flex:1}
+@media(prefers-reduced-motion:reduce){.online-shared-table,.online-shared-hand .card,.online-live-status{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -193,7 +226,8 @@ button:focus-visible{outline:3px solid #c5a4ff;outline-offset:3px}
  <div class="hidden" aria-hidden="true"><strong id="onlineSignedInName">—</strong><span id="onlineAccountStatus" aria-live="polite"></span></div>
  <div class="panel"><h3>Privékamer</h3><p class="muted small">Maak een kamer en stuur de code naar maximaal drie vrienden.</p><button class="pink" id="createRoomBtn" style="width:100%" disabled>Kamer aanmaken</button><div class="online-divider">of</div><label class="small muted" for="roomCodeInput">Kamercode van je vriend</label><div class="actions" style="margin-top:7px"><input id="roomCodeInput" maxlength="6" placeholder="ABC123" autocapitalize="characters" style="min-width:0;flex:1;background:#111321;border:1px solid var(--line);border-radius:12px;color:white;padding:11px"><button class="secondary" id="joinRoomBtn" disabled>Meedoen</button></div><p class="small muted" id="roomActionStatus" aria-live="polite">Maak eerst een account aan.</p></div>
 </div>
-<div class="panel online-lobby" id="onlineLobbyPanel"><div class="section-title"><div><div class="eyebrow">Jouw kamer</div><h3 id="onlineRoomTitle">Nog geen kamer</h3></div><span class="pill" id="onlineRoomState">Wachten</span></div><p class="muted" id="onlineRoomHelp">Maak een kamer aan of voer een code in om hier je vrienden te zien.</p><div id="onlineRoomCodeWrap" class="room-code-wrap hidden"><span class="small muted">DEEL DEZE CODE MET VRIENDEN</span><strong id="onlineRoomCode">------</strong><button class="secondary" id="copyRoomCodeBtn">Code kopiëren</button></div><div id="onlinePlayers" class="online-player-list"></div><div class="actions"><button id="startOnlineBtn" class="pink" disabled>Start online potje</button><button id="leaveRoomBtn" class="quiet" disabled>Kamer verlaten</button></div><div id="onlineGameStatus" class="notice hidden" aria-live="polite"><div id="onlineGameMessage"></div><div id="onlineGameBoard" style="margin-top:12px"></div></div></div>
+<div class="panel online-lobby" id="onlineLobbyPanel"><div class="section-title"><div><div class="eyebrow">Jouw kamer</div><h3 id="onlineRoomTitle">Nog geen kamer</h3></div><span class="pill" id="onlineRoomState">Wachten</span></div><p class="muted" id="onlineRoomHelp">Maak een kamer aan of voer een code in om hier je vrienden te zien.</p><div id="onlineRoomCodeWrap" class="room-code-wrap hidden"><span class="small muted">DEEL DEZE CODE MET VRIENDEN</span><strong id="onlineRoomCode">------</strong><button class="secondary" id="copyRoomCodeBtn">Code kopiëren</button></div><div id="onlinePlayers" class="online-player-list"></div><div class="actions"><button id="startOnlineBtn" class="pink" disabled>Start online potje</button><button id="leaveRoomBtn" class="quiet" disabled>Kamer verlaten</button></div></div>
+<div id="onlineGameStatus" class="online-live-status hidden" aria-live="polite"><div id="onlineGameMessage" class="notice online-turn-message"></div><div id="onlineGameBoard" style="margin-top:12px"></div></div>
 <div class="hidden" id="onlineSetupNotice"><p id="backendStatus"></p></div>
 
 </div>
@@ -363,7 +397,7 @@ async function refreshLobby(){
  $o('onlineRoomCode').textContent=room.code;$o('onlineRoomCodeWrap').classList.remove('hidden');
  $o('onlinePlayers').innerHTML=players.map(p=>`<div class="online-player"><span class="avatar">${escapeHtml(p.username.slice(0,1).toUpperCase())}</span><div><strong>${escapeHtml(p.username)}</strong><small>${p.user_id===room.host_id?'Host':`Speler ${p.seat+1}`}${p.user_id===sessionUser.id?' · Jij':''}</small></div></div>`).join('');
  $o('startOnlineBtn').disabled=busy||!isHost||players.length<2||room.status!=='waiting';
- $o('leaveRoomBtn').disabled=busy;$o('onlineGameStatus').classList.toggle('hidden',!['playing','finished'].includes(room.status));
+ $o('leaveRoomBtn').disabled=busy;$o('onlineGameStatus').classList.toggle('hidden',!['playing','finished'].includes(room.status));$o('onlineLobbyPanel').classList.toggle('hidden',['playing','finished'].includes(room.status));
  if(['playing','finished'].includes(room.status)) await refreshOnlineGame(); else { $o('onlineGameMessage').textContent='Als de host start, verschijnt hier het gedeelde potje.';$o('onlineGameBoard').innerHTML=''; }
  toggleRoomButtons()
 }
@@ -379,32 +413,46 @@ function renderOnlineGame(){
  if(!onlineState)return;
  const state=onlineState,me=state.players?.find(p=>p.seat===getMySeat());
  const msg=$o('onlineGameMessage'),board=$o('onlineGameBoard');
- if(!me){msg.textContent='Je spelerstoel is niet gevonden.';board.innerHTML='';return}
+ if(!me){msg.textContent='Je spelerstoel is niet gevonden. Verlaat de kamer en doe opnieuw mee.';board.innerHTML='';return}
  const current=state.players?.find(p=>p.seat===state.current);
  const finished=state.winner!==null&&state.winner!==undefined&&state.winner!==false;
  if(state.status==='waiting'){msg.textContent='Wachten op spelers…';board.innerHTML='';return}
- if(finished){
-   const winner=state.players.find(p=>p.seat===Number(state.winner));
-   msg.textContent='🏆 Potje afgelopen — '+(winner?.name||'Een speler')+' heeft gewonnen!';
- } else msg.textContent=(state.current===me.seat?'🎯 Jouw beurt! Speel een kaart of trek een kaart.':`⏳ ${current?.name||'Een andere speler'} is aan de beurt.`)+(state.pending_draw?` De volgende speler moet ${state.pending_draw} kaarten pakken.`:'');
+ const winner=finished?state.players.find(p=>p.seat===Number(state.winner)):null;
+ msg.textContent=finished?'🏆 Potje afgelopen — '+(winner?.name||'Een speler')+' heeft gewonnen!':(state.current===me.seat?'🎯 Jouw beurt! Speel een geldige kaart of trek een kaart.':`⏳ ${current?.name||'Een andere speler'} is aan de beurt.`)+(state.pending_draw?` Er moeten ${state.pending_draw} kaarten gepakt worden.`:'');
  const top=state.top||{color:'wild',value:'?'};
- const opponents=(state.players||[]).filter(p=>p.seat!==me.seat).map(p=>`<div class="online-opponent ${p.seat===state.current&&!finished?'is-active':''}"><div class="online-avatar">${escapeHtml((p.name||'?').slice(0,1).toUpperCase())}</div><div class="online-opponent-info"><strong>${escapeHtml(p.name)}</strong><span>${p.seat===state.current&&!finished?'🎯 Aan de beurt': '🂠 '+p.count+' kaarten'}</span></div><div class="online-cardbacks" aria-label="${p.count} verborgen kaarten">${Array.from({length:Math.min(Number(p.count)||0,5)},()=>'<i></i>').join('')}</div></div>`).join('');
+ const colorNames={red:'ROOD',blue:'BLAUW',green:'GROEN',yellow:'GEEL',wild:'WILD'};
+ const opponents=(state.players||[]).filter(p=>p.seat!==me.seat).map(p=>{const backs=Array.from({length:Math.min(Number(p.count)||0,7)},()=>'<span class="mini-back" aria-hidden="true"></span>').join('');return `<div class="player-badge ${p.seat===state.current&&!finished?'active-turn':''}" data-online-seat="${Number(p.seat)}"><strong>${escapeHtml(p.name||'Speler')}</strong><span class="small">${p.seat===state.current&&!finished?'🎯 Aan de beurt':`${Number(p.count)||0} kaarten`}</span><div class="opponent-hand" aria-label="${Number(p.count)||0} verborgen kaarten">${backs}</div></div>`}).join('');
  const myTurn=state.status==='playing'&&!finished&&state.current===me.seat&&!onlineActionBusy;
- const cards=(me.hand||[]).map(c=>`<button type="button" class="online-playing-card ${c.color==='wild'?'wild':c.color}" data-online-card="${escapeHtml(c.id)}" ${!myTurn?"disabled":""} aria-label="${escapeHtml((c.color||'wild')+' '+onlineCardLabel(c))}"><span class="online-card-corner">${c.color==='wild'?'✦':escapeHtml(c.color.toUpperCase())}</span><b>${escapeHtml(onlineCardLabel(c))}</b><small>${c.color==='wild'?'WILD':escapeHtml(c.color.toUpperCase())}</small></button>`).join('');
+ const cards=(me.hand||[]).map(c=>{
+   const isWild=c.color==='wild';
+   const playable=myTurn&&(Number(state.pending_draw)>0?(c.value==='+2'||c.value==='wild4'):(isWild||c.color===state.color||c.value===top.value||c.value==='wild'||c.value==='wild4'));
+   return `<button type="button" class="card ${isWild?'wild':escapeHtml(c.color)} ${playable?'playable-card':'unplayable-card'}" data-online-card="${escapeHtml(c.id)}" data-playable="${playable?'true':'false'}" data-corner="${escapeHtml(onlineCardLabel(c))}" aria-disabled="${playable?'false':'true'}" title="${escapeHtml((colorNames[c.color]||'')+' '+onlineCardLabel(c))}"><b>${escapeHtml(onlineCardLabel(c))}</b><small>${isWild?'KARTEL':escapeHtml((colorNames[c.color]||c.color||'').toUpperCase())}</small></button>`
+ }).join('');
  const colorMap={red:'#ff5265',blue:'#4c88ff',green:'#30c995',yellow:'#ffc842',wild:'conic-gradient(#ff5265,#ffc842,#30c995,#4c88ff,#ff5265)'};
- board.innerHTML=`<div class="online-match">
-   <div class="online-opponents">${opponents}</div>
-   <div class="online-arena">
-     <div class="online-pile-wrap"><span class="online-pile-label">TREKSTAPEL</span><button type="button" id="onlineDraw" class="online-deck" ${!myTurn?'disabled':''} aria-label="Trek een kaart"><span>✦</span><small>${Number(state.deck_count)||0} kaarten</small></button></div>
-     <div class="online-turn-orb">${finished?'🏆':state.current===me.seat?'✨':'⏳'}</div>
-     <div class="online-pile-wrap"><span class="online-pile-label">LAATSTE KAART</span><div class="online-top-card ${top.color==='wild'?'wild':escapeHtml(top.color)}" style="background:${colorMap[top.color]||colorMap.wild};color:${top.color==='yellow'?'#252033':'white'}"><b>${escapeHtml(onlineCardLabel(top))}</b><small>${escapeHtml((state.color||top.color||'wild').toUpperCase())}</small></div></div>
+ board.innerHTML=`<div class="game-layout online-live-layout">
+   <div class="panel online-table-panel">
+     <div class="tabletop online-shared-table">
+       <div class="opponents">${opponents}</div>
+       <div class="center-pile">
+         <div><button type="button" id="onlineDraw" class="deckback ${myTurn?'':'online-deck-disabled'}" ${!myTurn?'disabled':''} title="Trek een kaart" aria-label="Trek een kaart">✦</button><div class="pile-label">TREKSTAPEL · ${Number(state.deck_count)||0}</div></div>
+         <div><div id="onlineDiscardCard" class="card ${top.color==='wild'?'wild':escapeHtml(top.color)} online-discard-card" data-corner="${escapeHtml(onlineCardLabel(top))}" style="background:${colorMap[top.color]||colorMap.wild};color:${top.color==='yellow'?'#252033':'white'}"><b>${escapeHtml(onlineCardLabel(top))}</b><small>${top.color==='wild'?'KARTEL':escapeHtml((colorNames[top.color]||top.color||'').toUpperCase())}</small></div><div class="pile-label">AFLEGSTAPEL</div></div>
+       </div>
+       <div class="online-current-color">Huidige kleur: <strong class="color-${escapeHtml(state.color||top.color||'wild')}">${escapeHtml(colorNames[state.color||top.color||'wild']||'WILD')}</strong></div>
+     </div>
+     <div class="section-title online-hand-title"><h3>${escapeHtml(me.name||profileName||'Jij')}’s hand <span class="muted small">(${(me.hand||[]).length})</span></h3><span class="small muted">${finished?'Potje afgelopen':myTurn?'Jouw beurt':`${escapeHtml(current?.name||'Speler')} speelt…`}</span></div>
+     <div class="hand online-shared-hand">${cards||'<p class="muted">Geen kaarten meer. 🎉</p>'}</div>
+     <div class="actions online-game-actions"><button type="button" id="onlineUno" class="gold" ${!myTurn||(me.hand||[]).length!==1?'disabled':''}>✦ KARTEL!</button><button type="button" id="onlineRefresh" class="secondary">↻ Bijwerken</button></div>
    </div>
-   <div class="online-color-line"><span>Huidige kleur</span><strong class="online-color-chip ${escapeHtml(state.color||top.color||'wild')}">${escapeHtml((state.color||top.color||'wild').toUpperCase())}</strong></div>
-   <section class="online-hand-area"><div class="online-hand-heading"><div><span class="eyebrow">JOUW HAND</span><h3>Jouw kaarten</h3></div><span class="online-hand-count">${(me.hand||[]).length} kaarten</span></div><div class="online-hand">${cards||'<p class="muted">Geen kaarten meer. 🎉</p>'}</div></section>
-   <div class="online-board-foot">${myTurn?'✨ Jouw beurt — klik op een speelbare kaart.':'🔒 Je ziet alleen je eigen kaarten; de handen van anderen blijven verborgen.'}</div>
+   <aside class="side-stack online-side-stack">
+     <div class="panel"><div class="section-title"><h3>Potje</h3><span class="pill">${finished?'Afgelopen':'Bezig'}</span></div><div class="profile-grid online-round-metrics" style="grid-template-columns:1fr 1fr"><div class="metric"><strong>${(me.hand||[]).length}</strong><span>Jouw kaarten</span></div><div class="metric"><strong>${(state.players||[]).length}</strong><span>Spelers</span></div></div><p class="muted small">${myTurn?'Klik op een speelbare kaart of trek een kaart.':finished?'De ronde is afgelopen.':'Wacht tot jij aan de beurt bent.'}</p></div>
+     <div class="panel"><h3 style="margin-top:0">Aan tafel</h3><div class="log online-player-feed">${(state.players||[]).map(p=>`<div>${p.seat===state.current&&!finished?'●':'○'} <strong>${escapeHtml(p.name||'Speler')}</strong> <span class="muted">${p.seat===me.seat?'· Jij':p.seat===state.current&&!finished?'· Aan de beurt':`· ${Number(p.count)||0} kaarten`}</span></div>`).join('')}</div><button type="button" id="onlineLeaveGameBtn" class="quiet" style="width:100%;margin-top:12px">Kamer verlaten</button></div>
+   </aside>
  </div>`;
- board.querySelectorAll('[data-online-card]').forEach(b=>b.onclick=()=>onlinePlayCard(b.dataset.onlineCard,me));
- const draw=board.querySelector('#onlineDraw');if(draw)draw.onclick=()=>onlineDoAction('draw');
+ board.querySelectorAll('[data-online-card]').forEach(b=>b.onclick=()=>{if(b.dataset.playable==='true'){b.classList.add('online-card-playing');setTimeout(()=>onlinePlayCard(b.dataset.onlineCard,me),100)}});
+ const draw=board.querySelector('#onlineDraw');if(draw)draw.onclick=()=>{if(draw.disabled)return;draw.classList.add('is-taking');onlineDoAction('draw')};
+ const refresh=board.querySelector('#onlineRefresh');if(refresh)refresh.onclick=()=>refreshOnlineGame();
+ const uno=board.querySelector('#onlineUno');if(uno)uno.onclick=()=>showModal('KARTEL!','<p>Je hebt nog één kaart. 🎉</p>',[{label:'Verder spelen',cls:'pink',fn:closeModal}]);
+ const leave=board.querySelector('#onlineLeaveGameBtn');if(leave)leave.onclick=leaveRoom;
 }
 function getMySeat(){return onlineMySeat}
 async function onlinePlayCard(id,me){
@@ -427,7 +475,7 @@ async function onlineDoAction(action,cardId=null,color=null){
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function startPolling(){if(poller)clearInterval(poller);poller=setInterval(async()=>{if(!room||!sb)return;try{await refreshLobby()}catch(e){status('roomActionStatus','Lobby-update: '+friendly(e));}},2500)}
 async function startRoom(){if(!room||!isHost)return;setBusy(true);try{const {data,error}=await sb.rpc('kartel_online_start',{p_room_id:room.id});if(error)throw error;onlineState=data;await refreshLobby()}catch(e){status('roomActionStatus',friendly(e))}finally{setBusy(false);toggleRoomButtons()}}
-async function leaveRoom(){if(!room)return;setBusy(true);try{const id=room.id;await sb.rpc('kartel_leave_room',{p_room_id:id});room=null;isHost=false;onlineState=null;onlineMySeat=0;if(poller)clearInterval(poller);poller=null;$o('onlineRoomTitle').textContent='Nog geen kamer';$o('onlineRoomHelp').textContent='Maak een kamer aan of voer een code in om hier je vrienden te zien.';$o('onlineRoomCodeWrap').classList.add('hidden');$o('onlinePlayers').innerHTML='';$o('onlineRoomState').textContent='Wachten';$o('onlineGameStatus').classList.add('hidden');status('roomActionStatus','Je hebt de kamer verlaten.');}catch(e){status('roomActionStatus',friendly(e))}finally{setBusy(false);toggleRoomButtons()}}
+async function leaveRoom(){if(!room)return;setBusy(true);try{const id=room.id;await sb.rpc('kartel_leave_room',{p_room_id:id});room=null;isHost=false;onlineState=null;onlineMySeat=0;if(poller)clearInterval(poller);poller=null;$o('onlineRoomTitle').textContent='Nog geen kamer';$o('onlineRoomHelp').textContent='Maak een kamer aan of voer een code in om hier je vrienden te zien.';$o('onlineRoomCodeWrap').classList.add('hidden');$o('onlinePlayers').innerHTML='';$o('onlineRoomState').textContent='Wachten';$o('onlineGameStatus').classList.add('hidden');$o('onlineLobbyPanel').classList.remove('hidden');$o('onlineGameBoard').innerHTML='';$o('onlineGameMessage').textContent='';status('roomActionStatus','Je hebt de kamer verlaten.');}catch(e){status('roomActionStatus',friendly(e))}finally{setBusy(false);toggleRoomButtons()}}
 $o('authForm').addEventListener('submit',submitAuth);$o('showLogin').onclick=()=>setAuthMode('login');$o('showRegister').onclick=()=>setAuthMode('register');$o('logoutBtn').onclick=logout;$o('createRoomBtn').onclick=createRoom;$o('joinRoomBtn').onclick=joinRoom;$o('startOnlineBtn').onclick=startRoom;$o('leaveRoomBtn').onclick=leaveRoom;$o('copyRoomCodeBtn').onclick=async()=>{try{await navigator.clipboard.writeText(room?.code||$o('onlineRoomCode').textContent);status('roomActionStatus','Kamercode gekopieerd.')}catch{status('roomActionStatus','Kopieer de code handmatig: '+$o('onlineRoomCode').textContent)}};
 let cloudSaveTimer=null;window.addEventListener('kartel:save-updated',ev=>{if(!sessionUser||!sb||!ev.detail)return;if(cloudSaveTimer)clearTimeout(cloudSaveTimer);const payload=ev.detail;cloudSaveTimer=setTimeout(async()=>{try{const {error}=await sb.rpc('kartel_save_progress',{p_save:payload});if(error)status('onlineAccountStatus','Cloud-save fout: '+friendly(error));else status('onlineAccountStatus','Ingelogd als '+profileName+' · voortgang opgeslagen');}catch(e){status('onlineAccountStatus','Cloud-save fout: '+friendly(e));}},700)});
 applyConfig();toggleRoomButtons();
